@@ -1,0 +1,23 @@
+name: Offline source/installer checks
+on:
+  push:
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Shell syntax
+        run: |
+          bash -n boostdeck.sh
+          sh -n scripts/remote_entrynav2.sh
+      - name: Python syntax and tests
+        run: |
+          python -m compileall -q tools tests
+          PYTHONPATH=tools python -m unittest discover -s tests -p 'test_*.py'
+      - name: Prevent committing proprietary BMW components
+        run: |
+          ! find . -type f \( -name 'libAppFramework.A.so' -o -name 'libCoreFramework.A.so' -o -name 'libBoostDeckCDS.so' -o -name '*.tar' \) | grep .

@@ -1,0 +1,16 @@
+# NEVER commit extracts or private head-unit artifacts.
+work/
+private/
+backups/
+*.so
+*.tar
+*.tar.gz
+*.bin
+*.pyc
+__pycache__/
+.DS_Store
+*.log
+*.pem
+*.key
+.env
+.venv/
